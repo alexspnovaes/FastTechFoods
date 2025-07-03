@@ -1,0 +1,47 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using FastTechFoods.MenuService.Application.Commands.CreateProduct;
+using FastTechFoods.MenuService.Application.Commands.UpdateProduct;
+using FastTechFoods.MenuService.Application.Commands.DeleteProduct;
+using FastTechFoods.MenuService.Application.Queries.GetAllProducts;
+
+namespace FastTechFoods.MenuService.API.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ProductsController : ControllerBase
+    {
+        private readonly IMediator _mediator;
+
+        public ProductsController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll() =>
+            Ok(await _mediator.Send(new GetAllProductsQuery()));
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
+        {
+            var id = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetAll), new { id }, null);
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductCommand command)
+        {
+            if (id != command.Id) return BadRequest();
+            var updated = await _mediator.Send(command);
+            return updated ? NoContent() : NotFound();
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await _mediator.Send(new DeleteProductCommand(id));
+            return NoContent();
+        }
+    }
+}

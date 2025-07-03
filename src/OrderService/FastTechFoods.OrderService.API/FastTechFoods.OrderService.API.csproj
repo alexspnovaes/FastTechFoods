@@ -6,4 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FastTechFoods.OrderService.Application\FastTechFoods.OrderService.Application.csproj" />
+    <ProjectReference Include="..\FastTechFoods.OrderService.Infrastructure\FastTechFoods.OrderService.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
