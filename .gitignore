@@ -1,0 +1,72 @@
+# Build artifacts
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code settings
+.vscode/
+
+# Rider settings
+.idea/
+
+# Mac/Linux
+.DS_Store
+*.swp
+
+# Logs
+*.log
+logs/
+*.tlog
+
+# .NET stuff
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.nuget.props
+*.nuget.targets
+
+# Secrets
+secrets.json
+*.pfx
+*.key
+*.pem
+*.crt
+
+# EF Core migrations cache
+Migrations/_EFMigrationsHistory/
+
+# Docker
+docker-compose.override.yml
+.env
+.env.*
+
+# Kubernetes
+*.yaml
+*.yml
+helm-chart/
+k8s/
+deploy/
+
+# Node (se estiver usando assets)
+node_modules/
+npm-debug.log
+
+# Test results
+TestResults/
+coverage/
+
+# Others
+*.vspscc
+*.vssscc
+*.publishsettings
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
