@@ -4,12 +4,14 @@ using FastTechFoods.KitchenService.Application.Commands.RejectOrder;
 using FastTechFoods.KitchenService.Application.Queries.GetKitchenOrderById;
 using FastTechFoods.KitchenService.Application.Queries.GetPendingKitchenOrders;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastTechFoods.KitchenService.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "kitchen")] 
 public class KitchenController : ControllerBase
 {
     private readonly IMediator _mediator;

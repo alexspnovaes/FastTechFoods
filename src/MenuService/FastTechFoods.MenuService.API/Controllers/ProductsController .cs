@@ -1,9 +1,10 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using FastTechFoods.MenuService.Application.Commands.CreateProduct;
-using FastTechFoods.MenuService.Application.Commands.UpdateProduct;
+﻿using FastTechFoods.MenuService.Application.Commands.CreateProduct;
 using FastTechFoods.MenuService.Application.Commands.DeleteProduct;
+using FastTechFoods.MenuService.Application.Commands.UpdateProduct;
 using FastTechFoods.MenuService.Application.Queries.GetAllProducts;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FastTechFoods.MenuService.API.Controllers
 {
@@ -23,6 +24,7 @@ namespace FastTechFoods.MenuService.API.Controllers
             Ok(await _mediator.Send(new GetAllProductsQuery()));
 
         [HttpPost]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
         {
             var id = await _mediator.Send(command);
@@ -30,6 +32,7 @@ namespace FastTechFoods.MenuService.API.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductCommand command)
         {
             if (id != command.Id) return BadRequest();
@@ -38,6 +41,7 @@ namespace FastTechFoods.MenuService.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _mediator.Send(new DeleteProductCommand(id));

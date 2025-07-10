@@ -1,14 +1,42 @@
 using FastTechFoods.MenuService.Application.Commands.CreateProduct;
+using FastTechFoods.MenuService.Domain.Interfaces;
+using FastTechFoods.MenuService.Infrastructure.Data;
+using FastTechFoods.MenuService.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<MenuDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssemblyContaining<CreateProductHandler>();
-});
-// Add services to the container.
+    cfg.RegisterServicesFromAssemblyContaining<CreateProductHandler>());
+
+var jwtConfig = builder.Configuration.GetSection("Jwt");
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => { /* ... */ });
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
-
 app.UseHttpsRedirection();
-app.Run();
+app.UseAuthentication();
+app.UseAuthorization();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.MapControllers();
+
+app.Run();

@@ -1,5 +1,7 @@
 ﻿using FastTechFoods.MenuService.Domain.Entities;
 using FastTechFoods.MenuService.Domain.Interfaces;
+using FastTechFoods.MenuService.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace FastTechFoods.MenuService.Infrastructure.Repositories;
 public class ProductRepository : IProductRepository

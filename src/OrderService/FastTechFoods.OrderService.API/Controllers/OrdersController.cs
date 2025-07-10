@@ -1,14 +1,16 @@
-﻿using FastTechFoods.OrderService.Application.Commands.CreateOrder;
-using FastTechFoods.OrderService.Application.Commands.CancelOrder;
+﻿using FastTechFoods.OrderService.Application.Commands.CancelOrder;
+using FastTechFoods.OrderService.Application.Commands.CreateOrder;
 using FastTechFoods.OrderService.Application.Queries.GetOrderById;
 using FastTechFoods.OrderService.Application.Queries.GetOrdersByClientId;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastTechFoods.OrderService.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "client")]
 public class OrdersController : ControllerBase
 {
     private readonly IMediator _mediator;

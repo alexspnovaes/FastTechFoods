@@ -1,6 +1,0 @@
-@FastTechFoods.OrderService.API_HostAddress = http://localhost:5102
-
-GET {{FastTechFoods.OrderService.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

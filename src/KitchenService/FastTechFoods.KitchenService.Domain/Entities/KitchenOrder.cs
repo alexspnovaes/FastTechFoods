@@ -9,4 +9,5 @@ public class KitchenOrder
     public string Status { get; set; } = "Aguardando"; // Aguardando, Aceito, Rejeitado, Pronto
     public string? RejectionReason { get; set; }
     public DateTime ReceivedAt { get; set; } = DateTime.UtcNow;
+    public string DeliveryMethod { get; set; }
 }
