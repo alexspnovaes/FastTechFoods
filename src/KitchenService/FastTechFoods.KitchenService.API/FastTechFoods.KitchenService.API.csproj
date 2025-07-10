@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\FastTechFoods.BuildingBlocks.Messaging\FastTechFoods.BuildingBlocks.Messaging.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\FastTechFoods.BuildingBlocks.Security\FastTechFoods.BuildingBlocks.Security.csproj" />
     <ProjectReference Include="..\FastTechFoods.KitchenService.Application\FastTechFoods.KitchenService.Application.csproj" />
     <ProjectReference Include="..\FastTechFoods.KitchenService.Infrastructure\FastTechFoods.KitchenService.Infrastructure.csproj" />
   </ItemGroup>

@@ -1,8 +1,8 @@
+using FastTechFoods.BuildingBlocks.Security;
 using FastTechFoods.MenuService.Application.Commands.CreateProduct;
 using FastTechFoods.MenuService.Domain.Interfaces;
 using FastTechFoods.MenuService.Infrastructure.Data;
 using FastTechFoods.MenuService.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +15,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblyContaining<CreateProductHandler>());
 
-var jwtConfig = builder.Configuration.GetSection("Jwt");
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => { /* ... */ });
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 builder.Services.AddAuthorization();
 

@@ -1,40 +1,24 @@
 using FastTechFoods.BuildingBlocks.Messaging.AzureServiceBus;
 using FastTechFoods.BuildingBlocks.Messaging.Interfaces;
+using FastTechFoods.BuildingBlocks.Security;
 using FastTechFoods.OrderService.Application.Commands.CreateOrder;
 using FastTechFoods.OrderService.Domain.Interfaces;
 using FastTechFoods.OrderService.Infrastructure.Data;
 using FastTechFoods.OrderService.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssemblyContaining<CreateOrderHandler>();
 });
 
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
+
 builder.Services.AddDbContext<OrderDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-
-var jwtConfig = builder.Configuration.GetSection("Jwt");
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtConfig["Issuer"],
-            ValidAudience = jwtConfig["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig["Key"]!))
-        };
-    });
 
 builder.Services.AddAuthorization();
 
@@ -44,6 +28,8 @@ builder.Services.AddSingleton<IMessageBus>(
 
 // Add Repositories
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
 
 // Add Controllers
 builder.Services.AddControllers();

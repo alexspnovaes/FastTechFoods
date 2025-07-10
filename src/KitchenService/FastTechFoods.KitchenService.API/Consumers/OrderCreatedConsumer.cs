@@ -34,7 +34,7 @@ public class OrderCreatedConsumer : BackgroundService
                 OriginalOrderId = evt.OrderId,
                 ClientName = evt.ClientName,
                 DeliveryMethod = evt.DeliveryMethod,
-                Status = "Pending",
+                Status = "Aguardando",
                 Items = evt.Items.Select(i => new KitchenOrderItem
                 {
                     ProductName = i.ProductName,

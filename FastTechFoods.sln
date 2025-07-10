@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTechFoods.AuthService.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTechFoods.AuthService.API", "src\AuthService\FastTechFoods.AuthService.API\FastTechFoods.AuthService.API.csproj", "{6B09F98B-56B9-41BB-ABC9-B5A21CBB5C5E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTechFoods.BuildingBlocks.Security", "src\BuildingBlocks\FastTechFoods.BuildingBlocks.Security\FastTechFoods.BuildingBlocks.Security.csproj", "{BEE35FA2-E758-4C21-829D-342DC24B1967}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -133,6 +135,10 @@ Global
 		{6B09F98B-56B9-41BB-ABC9-B5A21CBB5C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B09F98B-56B9-41BB-ABC9-B5A21CBB5C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B09F98B-56B9-41BB-ABC9-B5A21CBB5C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEE35FA2-E758-4C21-829D-342DC24B1967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEE35FA2-E758-4C21-829D-342DC24B1967}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEE35FA2-E758-4C21-829D-342DC24B1967}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEE35FA2-E758-4C21-829D-342DC24B1967}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

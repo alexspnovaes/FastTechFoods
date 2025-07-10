@@ -6,13 +6,19 @@ using MediatR;
 
 namespace FastTechFoods.OrderService.Application.Commands.CreateOrder;
 
-public class CreateOrderHandler(IOrderRepository repo, IMessageBus bus) : IRequestHandler<CreateOrderCommand, Guid>
+public class CreateOrderHandler(IOrderRepository repo, IMessageBus bus, ICustomerRepository customerRepository) : IRequestHandler<CreateOrderCommand, Guid>
 {
     private readonly IOrderRepository _repo = repo;
     private readonly IMessageBus _bus = bus;
+    private readonly ICustomerRepository _customerRepository = customerRepository;
+
 
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
+        var customer = await _customerRepository.GetByIdAsync(request.ClientId)
+                      ?? throw new KeyNotFoundException($"Cliente '{request.ClientId}' não encontrado.");
+
+
         var order = new Order
         {
             ClientId = request.ClientId,
@@ -31,6 +37,7 @@ public class CreateOrderHandler(IOrderRepository repo, IMessageBus bus) : IReque
         {
             OrderId = order.Id,
             ClientId = order.ClientId,
+            ClientName = customer.Name,
             DeliveryMethod = order.DeliveryMethod,
             Items = [.. order.Items.Select(i => new PedidoCriadoItem
             {

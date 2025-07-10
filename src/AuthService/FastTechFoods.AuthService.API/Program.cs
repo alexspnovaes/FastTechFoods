@@ -1,29 +1,43 @@
-using FastTechFoods.AuthService.Application.Commands.Login;
+using FastTechFoods.AuthService.Application.Commands.RegisterUser;
+using FastTechFoods.AuthService.Application.Commons;
+using FastTechFoods.AuthService.Application.Commons.Behaviors;
 using FastTechFoods.AuthService.Application.Services;
 using FastTechFoods.AuthService.Domain.Interfaces;
 using FastTechFoods.AuthService.Infrastructure.Data;
 using FastTechFoods.AuthService.Infrastructure.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AuthDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserCommandValidator>();
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationExceptionFilter>();
+});
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+builder.Services.AddDbContext<AuthDbContext>(opts =>
+    opts.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 
 builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssemblyContaining<LoginHandler>());
+    cfg.RegisterServicesFromAssemblyContaining<RegisterUserCommand>());
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(opts =>
 {
-    options.SwaggerDoc("v1", new() { Title = "Auth API", Version = "v1" });
-    options.AddSecurityDefinition("Bearer", new()
+    opts.SwaggerDoc("v1", new() { Title = "Auth API", Version = "v1" });
+    opts.AddSecurityDefinition("Bearer", new()
     {
         In = ParameterLocation.Header,
         Description = "JWT Authorization header using the Bearer scheme.",
@@ -31,7 +45,7 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    opts.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
@@ -45,9 +59,15 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+// 6) Pipeline HTTP
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
 
+app.MapControllers();
 app.Run();
