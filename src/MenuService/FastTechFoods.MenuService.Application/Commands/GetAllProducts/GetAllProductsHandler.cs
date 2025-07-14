@@ -15,6 +15,6 @@ public class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, IEnume
 
     public async Task<IEnumerable<Product>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        return await _repo.GetAllAsync();
+        return await _repo.GetAllAsync(request.Category);
     }
 }

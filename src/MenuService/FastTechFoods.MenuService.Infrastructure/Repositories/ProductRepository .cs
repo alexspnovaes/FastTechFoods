@@ -13,8 +13,17 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Product>> GetAllAsync()
-        => await _context.Products.ToListAsync();
+    public async Task<IEnumerable<Product>> GetAllAsync(string? category = null)
+    {
+        var query = _context.Products.AsQueryable();
+
+        if (!string.IsNullOrEmpty(category))
+        {
+            query = query.Where(p => p.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
+        }
+
+        return await query.ToListAsync();
+    }
 
     public async Task<Product?> GetByIdAsync(Guid id)
         => await _context.Products.FindAsync(id);

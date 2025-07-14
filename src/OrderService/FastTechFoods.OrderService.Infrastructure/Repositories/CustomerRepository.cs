@@ -2,12 +2,6 @@
 using FastTechFoods.OrderService.Domain.Interfaces;
 using FastTechFoods.OrderService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FastTechFoods.OrderService.Infrastructure.Repositories;
 

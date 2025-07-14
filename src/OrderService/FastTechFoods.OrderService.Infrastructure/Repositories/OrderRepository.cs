@@ -35,15 +35,5 @@ public class OrderRepository : IOrderRepository
     {
         _context.Orders.Update(order);
         await _context.SaveChangesAsync();
-    }
-
-    public async Task CancelAsync(Guid id, string reason)
-    {
-        var order = await GetByIdAsync(id);
-        if (order == null) return;
-
-        order.Status = "Cancelado";
-        order.CancelReason = reason;
-        await _context.SaveChangesAsync();
-    }
+    }  
 }

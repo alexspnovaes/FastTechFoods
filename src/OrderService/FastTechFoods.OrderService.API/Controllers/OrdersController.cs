@@ -30,8 +30,15 @@ public class OrdersController : ControllerBase
     [HttpPost("{id:guid}/cancel")]
     public async Task<IActionResult> Cancel(Guid id, [FromBody] string reason)
     {
-        await _mediator.Send(new CancelOrderCommand(id, reason));
-        return NoContent();
+        try
+        {
+            await _mediator.Send(new CancelOrderCommand(id, reason));
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("{id:guid}")]

@@ -17,8 +17,16 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
 
-builder.Services.AddDbContext<OrderDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<OrderDbContext>(opt =>
+        opt.UseInMemoryDatabase("TestDb"));
+}
+else
+{
+    builder.Services.AddDbContext<OrderDbContext>(opt =>
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+}
 
 builder.Services.AddAuthorization();
 
@@ -49,3 +57,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+public partial class Program { }

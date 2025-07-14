@@ -3,4 +3,4 @@ using MediatR;
 
 namespace FastTechFoods.MenuService.Application.Queries.GetAllProducts;
 
-public class GetAllProductsQuery : IRequest<IEnumerable<Product>> { }
+public record GetAllProductsQuery(string? Category) : IRequest<IEnumerable<Product>> { }

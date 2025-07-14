@@ -20,8 +20,8 @@ namespace FastTechFoods.MenuService.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll() =>
-            Ok(await _mediator.Send(new GetAllProductsQuery()));
+        public async Task<IActionResult> GetAll([FromQuery] string? category) =>
+            Ok(await _mediator.Send(new GetAllProductsQuery(category)));
 
         [HttpPost]
         [Authorize(Roles = "manager")]
