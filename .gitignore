@@ -71,3 +71,7 @@ coverage/
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
+
+# não ignore GitHub Actions
+!.github/workflows/
+!.github/workflows/*.yml
