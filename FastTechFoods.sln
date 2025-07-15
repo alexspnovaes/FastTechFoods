@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.14.36203.30
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthService", "AuthService", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		src\AuthService\Dockerfile = src\AuthService\Dockerfile
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTechFoods.AuthService.Application", "src\AuthService\FastTechFoods.AuthService.Application\FastTechFoods.AuthService.Application.csproj", "{FE282118-30F2-415D-982C-B350248CF138}"
 EndProject
@@ -20,6 +23,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTechFoods.MenuService.API", "src\MenuService\FastTechFoods.MenuService.API\FastTechFoods.MenuService.API.csproj", "{DF40414B-8CCA-4C68-A380-6AD6408C6F75}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OrderService", "OrderService", "{DBC4BDEC-71F2-4E6C-8CE2-F8889215B5F9}"
+	ProjectSection(SolutionItems) = preProject
+		src\OrderService\Dockerfile = src\OrderService\Dockerfile
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTechFoods.OrderService.API", "src\OrderService\FastTechFoods.OrderService.API\FastTechFoods.OrderService.API.csproj", "{740B7B06-8E27-45AF-9A54-3C71B13CB9A4}"
 EndProject
@@ -72,6 +78,40 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTechFoods.IntegrationTests.Helpers", "tests\FastTechFoods.IntegrationTests.Helpers\FastTechFoods.IntegrationTests.Helpers.csproj", "{24A127D0-44F1-4119-9587-554A4B3638D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTechFoods.IntegrationTests", "tests\FastTechFoods.IntegrationTests\FastTechFoods.IntegrationTests.csproj", "{E757F19A-458F-4EF7-84C0-48668E7A8C6E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s", "k8s", "{8B973DBA-8BF4-4890-A81B-D257374ACE94}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auth-service", "auth-service", "{F0C7D15E-1327-4DCA-B58D-F09ED3D73AB2}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\auth-service\configmap.yaml = k8s\auth-service\configmap.yaml
+		k8s\auth-service\deployment.yaml = k8s\auth-service\deployment.yaml
+		k8s\auth-service\secret.yaml = k8s\auth-service\secret.yaml
+		k8s\auth-service\service.yaml = k8s\auth-service\service.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "order-service", "order-service", "{979B6793-F149-4C08-8C19-CC225EFB45BC}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\order-service\configmap.yaml = k8s\order-service\configmap.yaml
+		k8s\order-service\deployment.yaml = k8s\order-service\deployment.yaml
+		k8s\order-service\secret.yaml = k8s\order-service\secret.yaml
+		k8s\order-service\service.yaml = k8s\order-service\service.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "kitchen-service", "kitchen-service", "{0EBF740C-5AC2-4E57-9C55-F489C288BE17}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\kitchen-service\configmap.yaml = k8s\kitchen-service\configmap.yaml
+		k8s\kitchen-service\deployment.yaml = k8s\kitchen-service\deployment.yaml
+		k8s\kitchen-service\secret.yaml = k8s\kitchen-service\secret.yaml
+		k8s\kitchen-service\service.yaml = k8s\kitchen-service\service.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "menu-service", "menu-service", "{FDF7D510-0CCD-4359-8387-D0AE413C961B}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\menu-service\configmap.yaml = k8s\menu-service\configmap.yaml
+		k8s\menu-service\deployment.yaml = k8s\menu-service\deployment.yaml
+		k8s\menu-service\secret.yaml = k8s\menu-service\secret.yaml
+		k8s\menu-service\service.yaml = k8s\menu-service\service.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -230,6 +270,10 @@ Global
 		{94260029-8C54-40CE-87E8-2090C0C04B2C} = {D5128D55-CAAD-4625-8EB1-0426750EEFF9}
 		{24A127D0-44F1-4119-9587-554A4B3638D9} = {D5128D55-CAAD-4625-8EB1-0426750EEFF9}
 		{E757F19A-458F-4EF7-84C0-48668E7A8C6E} = {D5128D55-CAAD-4625-8EB1-0426750EEFF9}
+		{F0C7D15E-1327-4DCA-B58D-F09ED3D73AB2} = {8B973DBA-8BF4-4890-A81B-D257374ACE94}
+		{979B6793-F149-4C08-8C19-CC225EFB45BC} = {8B973DBA-8BF4-4890-A81B-D257374ACE94}
+		{0EBF740C-5AC2-4E57-9C55-F489C288BE17} = {8B973DBA-8BF4-4890-A81B-D257374ACE94}
+		{FDF7D510-0CCD-4359-8387-D0AE413C961B} = {8B973DBA-8BF4-4890-A81B-D257374ACE94}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE234E5F-7920-4E59-A2A2-968DA42573AF}
