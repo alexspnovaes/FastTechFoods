@@ -1,0 +1,40 @@
+# authservice-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authservice
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: authservice
+  template:
+    metadata:
+      labels:
+        app: authservice
+    spec:
+      containers:
+      - name: authservice
+        image: authservice:latest
+        imagePullPolicy: IfNotPresent   
+        # mantém as portas expostas no container
+        ports:
+        - containerPort: 8080
+        - containerPort: 8081
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authservice
+spec:
+  type: NodePort               # ou LoadBalancer, se preferir
+  selector:
+    app: authservice
+  ports:
+  - name: http
+    port: 3000                 # porta interna do Service (o que seu cliente vai usar)
+    targetPort: 8080           # porta dentro do container (igual ao EXPOSE)
+    nodePort: 30080            # porta no nó (entre 30000–32767)
