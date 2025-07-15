@@ -1,3 +1,5 @@
+name: ".NET Core CI"
+
 on:
   push:
     branches: [ main ]
@@ -26,10 +28,10 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Restore dependencies
-        run: dotnet restore --verbosity minimal
+        run: dotnet restore FastTechFoods.sln --verbosity minimal
 
       - name: Build solution
-        run: dotnet build **/*.sln --no-restore --configuration Release
+        run: dotnet build FastTechFoods.sln --no-restore --configuration Release
 
       - name: Run tests (unit & integration)
-        run: dotnet test **/*.sln --no-build --configuration Release --verbosity normal
+        run: dotnet test FastTechFoods.sln --no-build --configuration Release --verbosity normal
