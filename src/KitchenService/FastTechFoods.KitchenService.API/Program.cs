@@ -17,8 +17,16 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
-builder.Services.AddDbContext<KitchenDbContext>(options =>
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<KitchenDbContext>(opt =>
+        opt.UseInMemoryDatabase("TestDb"));
+}
+else
+{
+    builder.Services.AddDbContext<KitchenDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+}
 
 var connectionString = builder.Configuration.GetConnectionString("ServiceBus");
 builder.Services.AddSingleton<IMessageBus>(
@@ -46,3 +54,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+public partial class Program { }
+

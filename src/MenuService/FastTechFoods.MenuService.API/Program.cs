@@ -7,8 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<MenuDbContext>(options =>
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<MenuDbContext>(opt =>
+        opt.UseInMemoryDatabase("TestDb"));
+}
+else 
+{ 
+    builder.Services.AddDbContext<MenuDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+}
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
@@ -36,5 +44,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-
 app.Run();
+public partial class Program { } 

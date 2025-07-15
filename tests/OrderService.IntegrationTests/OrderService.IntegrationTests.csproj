@@ -18,9 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AuthService\FastTechFoods.AuthService.Application\FastTechFoods.AuthService.Application.csproj" />
     <ProjectReference Include="..\..\src\OrderService\FastTechFoods.OrderService.API\FastTechFoods.OrderService.API.csproj" />
-    <ProjectReference Include="..\..\src\OrderService\FastTechFoods.OrderService.Application\FastTechFoods.OrderService.Application.csproj" />
     <ProjectReference Include="..\FastTechFoods.IntegrationTests\FastTechFoods.IntegrationTests.csproj" />
   </ItemGroup>
 

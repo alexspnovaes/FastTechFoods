@@ -25,8 +25,17 @@ builder.Services.AddControllers(options =>
 
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-builder.Services.AddDbContext<AuthDbContext>(opts =>
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<AuthDbContext>(opt =>
+        opt.UseInMemoryDatabase("TestDb"));
+}
+else
+{
+    builder.Services.AddDbContext<AuthDbContext>(opts =>
     opts.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+}
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 
@@ -71,3 +80,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
+public partial class Program { }
