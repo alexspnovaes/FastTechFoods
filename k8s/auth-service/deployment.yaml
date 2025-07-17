@@ -1,8 +1,9 @@
-# authservice-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: authservice
+  labels:
+    app: authservice
 spec:
   replicas: 2
   selector:
@@ -14,27 +15,45 @@ spec:
         app: authservice
     spec:
       containers:
-      - name: authservice
-        image: authservice:latest
-        imagePullPolicy: IfNotPresent   
-        # mantém as portas expostas no container
-        ports:
-        - containerPort: 8080
-        - containerPort: 8081
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: "Development"
+        - name: authservice
+          image: authservice:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
   name: authservice
+  labels:
+    app: authservice
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "8080"
 spec:
-  type: NodePort               # ou LoadBalancer, se preferir
+  type: ClusterIP
   selector:
     app: authservice
   ports:
-  - name: http
-    port: 3000                 # porta interna do Service (o que seu cliente vai usar)
-    targetPort: 8080           # porta dentro do container (igual ao EXPOSE)
-    nodePort: 30080            # porta no nó (entre 30000–32767)
+    - name: http
+      port: 8080
+      targetPort: 8080

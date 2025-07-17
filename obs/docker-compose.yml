@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   db:
     image: mariadb:10.5
@@ -23,6 +25,9 @@ services:
       MYSQL_PASSWORD: zabbix_pass
     ports:
       - "10051:10051"
+    # permite que o container use host.docker.internal para alcançar o "host"  
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   zabbix-web:
     image: zabbix/zabbix-web-nginx-mysql:latest
@@ -49,7 +54,7 @@ services:
       ZBX_SERVER_HOST: zabbix-server
       ZBX_HOSTNAME: "docker-host"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock  # se quiser coletar métricas do Docker
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "10050:10050"
 
