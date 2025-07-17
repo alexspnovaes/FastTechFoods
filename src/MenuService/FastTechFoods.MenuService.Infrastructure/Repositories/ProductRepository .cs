@@ -17,13 +17,15 @@ public class ProductRepository : IProductRepository
     {
         var query = _context.Products.AsQueryable();
 
-        if (!string.IsNullOrEmpty(category))
+        if (!string.IsNullOrWhiteSpace(category))
         {
-            query = query.Where(p => p.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
+            var cat = category.Trim().ToLower();
+            query = query.Where(p => p.Category.Equals(cat, StringComparison.CurrentCultureIgnoreCase));
         }
 
         return await query.ToListAsync();
     }
+
 
     public async Task<Product?> GetByIdAsync(Guid id)
         => await _context.Products.FindAsync(id);

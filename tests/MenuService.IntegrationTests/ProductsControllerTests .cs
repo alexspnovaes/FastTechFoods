@@ -124,4 +124,16 @@ public class ProductsControllerTests : IClassFixture<WebApplicationFactory<Progr
         var prod = await db.Products.FindAsync(_seededId);
         prod.Should().BeNull();
     }
+
+    [Fact]
+    public async Task GetAll_WithCategory_IgnoresCase()
+    {
+        var resp = await _client.GetAsync("/api/products?category=cat");
+        resp.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var list = await resp.Content.ReadFromJsonAsync<List<Product>>();
+        list.Should().ContainSingle(p =>
+            p.Id == _seededId && p.Category.Equals("Cat", StringComparison.Ordinal));
+    }
+
 }
