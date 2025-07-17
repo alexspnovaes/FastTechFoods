@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kitchenservice
+  labels:
+    app: kitchenservice
 spec:
   replicas: 2
   selector:
@@ -13,26 +15,45 @@ spec:
         app: kitchenservice
     spec:
       containers:
-      - name: kitchenservice
-        image: kitchenservice:latest
-        imagePullPolicy: IfNotPresent           
-        ports:
-        - containerPort: 8080
-        - containerPort: 8081
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: "Development"
+        - name: kitchenservice
+          image: kitchenservice:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: authservice
+  name: kitchenservice
+  labels:
+    app: kitchenservice
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "8080"
 spec:
-  type: NodePort               
+  type: ClusterIP
   selector:
-    app: authservice
+    app: kitchenservice
   ports:
-  - name: http
-    port: 3000                 
-    targetPort: 8080           
-    nodePort: 30083            
+    - name: http
+      port: 8080
+      targetPort: 8080

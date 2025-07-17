@@ -2,15 +2,20 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kitchenservice
-  namespace: staging
+  namespace: default
   labels:
     app: kitchenservice
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "8080"
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: kitchenservice
   ports:
     - name: http
-      port: 80
-      targetPort: 80
       protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 32209
