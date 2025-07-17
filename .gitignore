@@ -75,3 +75,11 @@ _ReSharper*/
 # não ignore GitHub Actions
 !.github/workflows/
 !.github/workflows/*.yml
+
+# Desfazer ignore de k8s e obs (sempre depois das regras gerais)
+!k8s/
+!k8s/**/*.yaml
+!k8s/**/*.yml
+
+!obs/
+!obs/**/*

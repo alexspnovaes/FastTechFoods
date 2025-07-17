@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: authservice
+  namespace: default
+  labels:
+    app: authservice
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "8080"
+spec:
+  selector:
+    app: authservice
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 31560
+  type: NodePort

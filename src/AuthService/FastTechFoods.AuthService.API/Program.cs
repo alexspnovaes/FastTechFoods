@@ -8,13 +8,26 @@ using FastTechFoods.AuthService.Infrastructure.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserCommandValidator>();
+builder.Services.AddHealthChecks();
+builder.Services.AddApplicationInsightsTelemetry();
 
+builder.Services.AddOpenTelemetry()
+    .WithMetrics(mb =>
+    {
+        mb.AddAspNetCoreInstrumentation()
+          .AddHttpClientInstrumentation();
+    });
+
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserCommandValidator>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 
@@ -33,7 +46,7 @@ if (builder.Environment.IsEnvironment("Testing"))
 else
 {
     builder.Services.AddDbContext<AuthDbContext>(opts =>
-    opts.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+        opts.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 }
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -45,8 +58,8 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opts =>
 {
-    opts.SwaggerDoc("v1", new() { Title = "Auth API", Version = "v1" });
-    opts.AddSecurityDefinition("Bearer", new()
+    opts.SwaggerDoc("v1", new OpenApiInfo { Title = "Auth API", Version = "v1" });
+    opts.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
         Description = "JWT Authorization header using the Bearer scheme.",
@@ -59,7 +72,7 @@ builder.Services.AddSwaggerGen(opts =>
         {
             new OpenApiSecurityScheme
             {
-                Reference = new() { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
             },
             Array.Empty<string>()
         }
@@ -68,16 +81,39 @@ builder.Services.AddSwaggerGen(opts =>
 
 var app = builder.Build();
 
-// 6) Pipeline HTTP
+app.UseHttpsRedirection();
+app.UseHttpMetrics();
+app.MapMetrics();
+app.UseAuthentication();
+app.UseAuthorization();
+
+
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false,
+    ResponseWriter = async (ctx, report) =>
+    {
+        ctx.Response.ContentType = "text/plain";
+        await ctx.Response.WriteAsync(report.Status.ToString());
+    }
+});
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = _ => true,
+    ResponseWriter = async (ctx, report) =>
+    {
+        ctx.Response.ContentType = "text/plain";
+        await ctx.Response.WriteAsync(report.Status.ToString());
+    }
+});
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
+
 public partial class Program { }
